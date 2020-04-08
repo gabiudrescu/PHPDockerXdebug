@@ -1,0 +1,8 @@
+#!/bin/bash -eu
+# Until https://github.com/docker/for-linux/issues/264 is solved:
+export DOCKER_HOST_IP=$(docker run --rm bash bash -c \
+    'H=$(getent ahostsv4 host.docker.internal | grep STREAM | cut -d" " -f1); \
+    [ -z "$H" ] && H=$(ip -4 route show default | cut -d" " -f3); echo $H'
+)
+docker-compose stop
+docker-compose up -d
